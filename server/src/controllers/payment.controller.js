@@ -24,16 +24,15 @@ export const createOrder = async (req, res) => {
         }
     })
 
-    const payment = await paymentModel.create({
+    const payment = (await paymentModel.create({
         orderId: order.id,
         amount: order.amount,
         currency: order.currency,
         product: product._id,
         status: "pending"
-    })
+    })).toObject();
 
     return res.status(201).json({
-        message: "Order created",
-        payment
+        ...payment, keyId: paymentInstance.key_id
     })
 }
